@@ -13,32 +13,39 @@ set(CMAKE_CXX_STANDARD 17)
 # Initialize the SDK
 pico_sdk_init()
 
-# Add your source files
-add_executable(${NAME}
-    main.cpp # <-- Add source files here!
+# Define the source files
+set(SOURCES
+    src/main.cpp
+    src/dispatcher.hpp
 )
 
+# Define the include directories
+include_directories(src src/commands)
+
+# Add your source files
+add_executable(${NAME} ${SOURCES})
+
 # Include required libraries
-# This assumes `pimoroni-pico` is stored alongside your project
-# include(common/pimoroni_i2c)
-# include(common/pimoroni_bus)
-# include(libraries/bitmap_fonts/bitmap_fonts)
-# include(libraries/hershey_fonts/hershey_fonts)
-# include(libraries/pico_explorer/pico_explorer)
+# This assumes pimoroni-pico is stored alongside your project
 include(libraries/servo2040/servo2040)
+include(drivers/analogmux/analogmux)
 include(drivers/button/button)
+include(drivers/analog/analog)
 
 # Don't forget to link the libraries you need!
 target_link_libraries(${NAME}
-    # pimoroni_i2c
-    # pico_explorer
     pico_stdlib
-    hardware_pio
     servo2040
+    analogmux
+    analog
     button
 )
 
-# create map/bin/hex file etc.
+# Enable usb output, disable uart output
+pico_enable_stdio_usb(${NAME} 1)
+pico_enable_stdio_uart(${NAME} 0)
+
+# Create map/bin/hex file etc.
 pico_add_extra_outputs(${NAME})
 
 # Set up files for the release packages
