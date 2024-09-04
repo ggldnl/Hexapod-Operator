@@ -16,7 +16,7 @@ pico_sdk_init()
 # Define the source files
 set(SOURCES
     src/main.cpp
-    src/dispatcher.hpp
+    # src/dispatcher.hpp
 )
 
 # Define the include directories

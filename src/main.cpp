@@ -5,6 +5,10 @@
 #include "dispatcher.hpp"
 #include "commands/get_voltage_command.hpp"
 #include "commands/get_current_command.hpp"
+#include "commands/read_sensor_command.hpp"
+#include "commands/set_led_command.hpp"
+
+#include "utils/analog_reader.hpp"
 
 using namespace plasma;
 using namespace servo;
@@ -12,14 +16,30 @@ using namespace servo;
 
 int main() {
 
+    // 1. Create a pool with shared objects
+    // 2. Commands will have a reference to the objects they control
+    // 3. Commands will silently fail and return the value (get command) or 0f
+    // 7. Provide multiple commands that use the same servo cluster
+
     stdio_init_all();  // Initialize standard I/O for USB or serial communication
+
+    // Shared object pool
+    ServoCluster servos = ServoCluster(pio0, 0, servo2040::SERVO_1, servo2040::NUM_SERVOS);
+    WS2812 leds(servo2040::NUM_LEDS, pio1, 0, servo2040::LED_DATA);
+    AnalogReader reader;
+
+    servos.init();
+    leds.start();
 
     // Initialize the dispatcher
     CommandDispatcher dispatcher;
 
     // Register the commands
-    dispatcher.registerCommand(0x01, std::make_unique<GetVoltageCommand>());
-    dispatcher.registerCommand(0x02, std::make_unique<GetCurrentCommand>());
+    dispatcher.registerCommand(0x01, std::make_unique<GetVoltageCommand>(reader));
+    dispatcher.registerCommand(0x02, std::make_unique<GetCurrentCommand>(reader));
+    dispatcher.registerCommand(0x03, std::make_unique<ReadSensorCommand>(reader));
+    dispatcher.registerCommand(0x04, std::make_unique<SetLEDCommand>(leds));
+    dispatcher.registerCommand(0x05, std::make_unique<TestConversionCommand>(leds));
 
     // Where to store the response
     std::vector<uint8_t> response;
@@ -48,7 +68,6 @@ int main() {
                 response = dispatcher.dispatch(opCode, args);
 
                 // Send the response back
-                putchar(opCode)
                 for (uint8_t byte : response) {
                     putchar(byte);
                 }
@@ -56,5 +75,5 @@ int main() {
         }
     }
 
-    return 0;  // Return is unnecessary here but included for completeness
+    return 0;
 }

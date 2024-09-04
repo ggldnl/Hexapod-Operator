@@ -5,7 +5,6 @@
 #include <map>
 #include <memory>
 
-// Command Dispatcher
 class CommandDispatcher {
     std::map<uint8_t, std::unique_ptr<Command>> commandMap;
 
