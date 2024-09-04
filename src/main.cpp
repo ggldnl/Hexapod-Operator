@@ -39,7 +39,6 @@ int main() {
     dispatcher.registerCommand(0x02, std::make_unique<GetCurrentCommand>(reader));
     dispatcher.registerCommand(0x03, std::make_unique<ReadSensorCommand>(reader));
     dispatcher.registerCommand(0x04, std::make_unique<SetLEDCommand>(leds));
-    dispatcher.registerCommand(0x05, std::make_unique<TestConversionCommand>(leds));
 
     // Where to store the response
     std::vector<uint8_t> response;
