@@ -1,4 +1,4 @@
-#ifndef READ_ANALOG_COMMAND_HPP
+#ifndef READ_SENSOR_COMMAND_HPP
 #define READ_SENSOR_COMMAND_HPP
 
 #include "command.hpp"
@@ -39,4 +39,4 @@ public:
     }
 };
 
-#endif // READ_ANALOG_COMMAND_HPP
+#endif // READ_SENSOR_COMMAND_HPP
