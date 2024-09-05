@@ -4,6 +4,7 @@
 #include <vector>
 #include <cstdint>
 #include <cstring>
+#include <limits>
 
 
 // Converts a float to a vector of uint8_t (byte array)
