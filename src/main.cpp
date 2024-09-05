@@ -16,11 +16,6 @@ using namespace servo;
 
 int main() {
 
-    // 1. Create a pool with shared objects
-    // 2. Commands will have a reference to the objects they control
-    // 3. Commands will silently fail and return the value (get command) or 0f
-    // 7. Provide multiple commands that use the same servo cluster
-
     stdio_init_all();  // Initialize standard I/O for USB or serial communication
 
     // Shared object pool
