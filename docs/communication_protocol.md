@@ -15,8 +15,8 @@ The following table describes the supported operations, their corresponding opco
 | Set LEDs                  | `0x05`       | `<num>` (1 byte) `<pin>` `<r>` `<g>` `<b>` (4 bytes) x num     | `0x00`  (1 byte)  |
 | Attach Servos             | `0x06`       | None                                                           | `0x00`  (1 byte)  |
 | Detach Servos             | `0x07`       | None                                                           | `0x00`  (1 byte)  |
-| Set Servo Pulse Width     | `0x08`       | `<pin>` (1 byte) `<pulse_width>` (2 bytes)                     | `0x00`  (1 byte)  |
-| Set Servos Pulse Width    | `0x09`       | `<num>` (1 byte) `<pin>` `<pulse_width>` (3 bytes) x num       | `0x00`  (1 byte)  |
+| Set Servo Pulse Width     | `0x08`       | `<pin>` (1 byte) `<pulse_width>` (4 bytes)                     | `0x00`  (1 byte)  |
+| Set Servos Pulse Width    | `0x09`       | `<num>` (1 byte) `<pin>` `<pulse_width>` (5 bytes) x num       | `0x00`  (1 byte)  |
 
 Description table
 
