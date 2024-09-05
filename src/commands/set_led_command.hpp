@@ -13,13 +13,11 @@ class SetLEDCommand : public Command {
 private:
 
     WS2812& led_bar;
-    uint8_t pin;
 
 public:
 
     SetLEDCommand(WS2812& led_bar) :
-        led_bar(led_bar),
-        pin(0) {}
+        led_bar(led_bar) {}
 
     void execute(const std::vector<uint8_t>& args) override {
 
@@ -27,7 +25,7 @@ public:
             return;
         }
 
-        pin = args[0];
+        uint8_t pin = args[0];
         if (pin > 5) {
             return;
         }
