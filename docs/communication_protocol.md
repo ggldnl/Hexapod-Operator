@@ -18,7 +18,7 @@ The following table describes the supported operations, their corresponding opco
 | Set Servo Pulse Width     | `0x08`       | `<pin>` (1 byte) `<pulse_width>` (4 bytes)                     | `0x00`  (1 byte)  |
 | Set Servos Pulse Width    | `0x09`       | `<num>` (1 byte) `<pin>` `<pulse_width>` (5 bytes) x num       | `0x00`  (1 byte)  |
 
-Description table
+Description table:
 
 | Operation                 | Description                                                                                       |
 |---------------------------|---------------------------------------------------------------------------------------------------|
