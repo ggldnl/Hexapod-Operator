@@ -32,7 +32,7 @@ public:
     }
 
     std::vector<uint8_t> getResponse() override {
-        return {0x00}
+        return {0x00};
     }
 };
 

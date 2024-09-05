@@ -36,11 +36,11 @@ public:
             uint8_t pin = args[base_index];
 
             // Ensure the pin is within valid range
-            if (pin >= NUM_SERVOS) {
+            if (pin >= servo2040::NUM_SERVOS) {
                 continue; // Skip this group if the pin is out of range
             }
 
-            float pulse_width = vec2float(args, base_index + 1)
+            float pulse_width = vec2float(args, base_index + 1);
 
             // Set the pulse
             servos.pulse(pin, pulse_width);
@@ -48,7 +48,7 @@ public:
     }
 
     std::vector<uint8_t> getResponse() override {
-        return {0x00}
+        return {0x00};
     }
 };
 
