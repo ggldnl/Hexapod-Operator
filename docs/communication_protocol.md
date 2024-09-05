@@ -13,10 +13,10 @@ The following table describes the supported operations, their corresponding opco
 | Read Sensor               | `0x03`       | `<pin>` (1 byte)                                               | `<val>` (4 bytes) |
 | Set LED                   | `0x04`       | `<pin>` (1 byte) `<r>` (1 byte) `<g>` (1 byte) `<b>` (1 byte)  | `0x00`  (1 byte)  |
 | Set LEDs                  | `0x05`       | `<num>` (1 byte) `<pin>` `<r>` `<g>` `<b>` (4 bytes) x num     | `0x00`  (1 byte)  |
-| Detach Servos             | `0x06`       | `<num>` (1 byte) `<pin>` (1 byte) x num                        | `0x00`  (1 byte)  |
-| Set Servo Pulse Width     | `0x07`       | `<pin>` (1 byte) `<pulse_width>` (2 bytes)                     | `0x00`  (1 byte)  |
-| Set Servos Pulse Width    | `0x08`       | `<num>` (1 byte) `<pin>` `<pulse_width>` (3 bytes) x num       | `0x00`  (1 byte)  |
-| Attach Servos             | `0x09`       | `<num>` (1 byte) `<pin>` (1 byte) x num                        | `0x00`  (1 byte)  |
+| Attach Servos             | `0x06`       | None                                                           | `0x00`  (1 byte)  |
+| Detach Servos             | `0x07`       | None                                                           | `0x00`  (1 byte)  |
+| Set Servo Pulse Width     | `0x08`       | `<pin>` (1 byte) `<pulse_width>` (2 bytes)                     | `0x00`  (1 byte)  |
+| Set Servos Pulse Width    | `0x09`       | `<num>` (1 byte) `<pin>` `<pulse_width>` (3 bytes) x num       | `0x00`  (1 byte)  |
 
 Description table
 
@@ -27,10 +27,11 @@ Description table
 | Read Sensor               | Reads the voltage value of an analog pin                                                          |
 | Set LED                   | Sets the rgb value for the given LED                                                              |
 | Set LEDs                  | For each LED pin, sets the respective rgb value                                                   |
+| Attach Servos             | Attaches all the servos                                                                           |
 | Detach Servos             | Detaches all the servos                                                                           |
 | Set Servo Pulse Width     | Set the pulse width for the specified servo                                                       |
 | Set Servos Pulse Width    | For each Servo pin, sets the respective pulse width                                               |
-| Attach Servos             | Attaches all the servos                                                                           |
+
 
 The protocol is designed using the Command Design Pattern, which simplifies the addition of new commands. 
 
