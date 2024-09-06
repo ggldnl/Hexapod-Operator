@@ -36,15 +36,15 @@ int main() {
     CommandDispatcher dispatcher;
 
     // Register the commands
-    dispatcher.registerCommand(0x04, std::make_unique<AttachServosCommand>(servos));
-    dispatcher.registerCommand(0x04, std::make_unique<DetachServosCommand>(servos));
-    dispatcher.registerCommand(0x02, std::make_unique<GetCurrentCommand>(reader));
     dispatcher.registerCommand(0x01, std::make_unique<GetVoltageCommand>(reader));
+    dispatcher.registerCommand(0x02, std::make_unique<GetCurrentCommand>(reader));
     dispatcher.registerCommand(0x03, std::make_unique<ReadSensorCommand>(reader));
     dispatcher.registerCommand(0x04, std::make_unique<SetLEDCommand>(leds));
-    dispatcher.registerCommand(0x04, std::make_unique<SetLEDsCommand>(leds));
-    dispatcher.registerCommand(0x04, std::make_unique<SetServoPulseCommand>(servos));
-    dispatcher.registerCommand(0x04, std::make_unique<SetServoPulsesCommand>(servos));
+    dispatcher.registerCommand(0x05, std::make_unique<SetLEDsCommand>(leds));
+    dispatcher.registerCommand(0x06, std::make_unique<AttachServosCommand>(servos));
+    dispatcher.registerCommand(0x07, std::make_unique<DetachServosCommand>(servos));
+    dispatcher.registerCommand(0x08, std::make_unique<SetServoPulseCommand>(servos));
+    dispatcher.registerCommand(0x09, std::make_unique<SetServoPulsesCommand>(servos));
 
     // Where to store the response
     std::vector<uint8_t> response;
