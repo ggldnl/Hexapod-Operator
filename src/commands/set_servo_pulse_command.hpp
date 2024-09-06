@@ -20,7 +20,7 @@ public:
     void execute(const std::vector<uint8_t>& args) override {
         
         // Error: one byte required
-        if (args.size() != 1) {
+        if (args.size() != 5) {
             return;
         }
 
