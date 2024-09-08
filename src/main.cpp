@@ -46,6 +46,13 @@ int main() {
     dispatcher.registerCommand(0x08, std::make_unique<SetServoPulseCommand>(servos));
     dispatcher.registerCommand(0x09, std::make_unique<SetServoPulsesCommand>(servos));
 
+    // Display an animation with the LEDs to signal that the robot is ready
+    for (uint8_t i = 0; i < 6; ++i) {
+        dispatcher.dispatch(0x04, {i, 208, 107, 51});   // This is a cool shade of orange
+        sleep_ms(50);                                  // wait for 0.5 seconds
+        dispatcher.dispatch(0x04, {i, 0, 0, 0});
+    }
+
     // Where to store the response
     std::vector<uint8_t> response;
 
