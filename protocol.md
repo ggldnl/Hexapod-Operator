@@ -17,6 +17,8 @@ The following table describes the supported operations, their corresponding opco
 | Detach Servos             | `0x07`       | None                                                           | `0x00`  (1 byte)  |
 | Set Servo Pulse Width     | `0x08`       | `<pin>` (1 byte) `<pulse_width>` (4 bytes)                     | `0x00`  (1 byte)  |
 | Set Servos Pulse Width    | `0x09`       | `<num>` (1 byte) `<pin>` `<pulse_width>` (5 bytes) x num       | `0x00`  (1 byte)  |
+| Set Servo Angle           | `0x0A`       | `<pin>` (1 byte) `<angle>` (4 bytes)                           | `0x00`  (1 byte)  |
+| Set Servo Angles          | `0x0B`       | `<num>` (1 byte) `<pin>` `<angle>` (5 bytes) x num             | `0x00`  (1 byte)  |
 
 Description table:
 
@@ -31,6 +33,8 @@ Description table:
 | Detach Servos             | Detaches all the servos                                                                           |
 | Set Servo Pulse Width     | Set the pulse width for the specified servo                                                       |
 | Set Servos Pulse Width    | For each Servo pin, sets the respective pulse width                                               |
+| Set Servo Angle           | Set the angle for the specified servo                                                             |
+| Set Servo Angles          | For each Servo pin, sets the respective angle                                                     |
 
 
 The protocol is designed using the Command Design Pattern, which simplifies the addition of new commands. 

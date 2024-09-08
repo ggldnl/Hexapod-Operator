@@ -13,6 +13,8 @@
 #include "commands/set_leds_command.hpp"
 #include "commands/set_servo_pulse_command.hpp"
 #include "commands/set_servo_pulses_command.hpp"
+#include "commands/set_servo_angle_command.hpp"
+#include "commands/set_servo_angles_command.hpp"
 
 #include "utils/analog_reader.hpp"
 
@@ -45,6 +47,8 @@ int main() {
     dispatcher.registerCommand(0x07, std::make_unique<DetachServosCommand>(servos));
     dispatcher.registerCommand(0x08, std::make_unique<SetServoPulseCommand>(servos));
     dispatcher.registerCommand(0x09, std::make_unique<SetServoPulsesCommand>(servos));
+    dispatcher.registerCommand(0x0A, std::make_unique<SetServoAngleCommand>(servos));
+    dispatcher.registerCommand(0x0B, std::make_unique<SetServoAnglesCommand>(servos));
 
     // Display an animation with the LEDs to signal that the robot is ready
     for (uint8_t i = 0; i < 6; ++i) {
