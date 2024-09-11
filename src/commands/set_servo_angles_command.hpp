@@ -26,13 +26,13 @@ public:
         // The first argument specifies the number of 4-byte groups
         uint8_t group_count = args[0];
 
-        // Each group is 4 bytes, so we expect (1 + 4 * group_count) total bytes
-        if (args.size() != (1 + 4 * group_count)) {
+        // Each group is 5 bytes (pin + float value), so we expect (1 + 5 * group_count) total bytes
+        if (args.size() != (1 + 5 * group_count)) {
             return;
         }
 
         for (uint8_t i = 0; i < group_count; ++i) {
-            uint8_t base_index = 1 + i * 4;
+            uint8_t base_index = 1 + i * 5;
             uint8_t pin = args[base_index];
 
             // Ensure the pin is within valid range
