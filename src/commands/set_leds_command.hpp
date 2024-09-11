@@ -38,7 +38,7 @@ public:
             uint8_t pin = args[base_index];
 
             // Ensure the pin is within valid range
-            if (pin > 5) {
+            if (pin >= servo2040::NUM_LEDS) {
                 continue; // Skip this group if the pin is out of range
             }
 
