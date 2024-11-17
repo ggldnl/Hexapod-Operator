@@ -1,6 +1,6 @@
 # Hexapod Operator
 
-My robot consists of two parts: a Controller and an Operator. The Controller is responsible for generating commands, which are then sent to the Operator for execution. I used a Raspberry Pi as Controller  and a Servo2040 board as Operator, for handling low-level control of the hexapod's servos.
+My hexapod robot consists of two parts: a Controller and an Operator. The Controller is responsible for generating commands, which are then sent to the Operator for execution. I used a Raspberry Pi as Controller  and a Servo2040 board as Operator, for handling low-level control of the hexapod's servos.
 This repository contains the firmware for the Servo2040 board.
 
 For a complete overview of the project refer to the [main Hexapod repository](https://github.com/ggldnl/Hexapod.git). Take also a look to the [repository containing the Controller's code](https://github.com/ggldnl/Hexapod-Controller.git). 
