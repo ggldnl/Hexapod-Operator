@@ -220,3 +220,7 @@ int main() {
 ```
 
 I used opcode `0x08` as it's the first available. Once registered, the dispatcher will automatically invoke the new `ToggleStatusCommand` when the opcode `0x08` is received as first byte over the serial connection. The following bytes are treated as arguments and interpreted.
+
+## Contribution
+
+Feel free to contribute by opening issues or submitting pull requests. For further information, check out the [main Hexapod repository](https://github.com/ggldnl/Hexapod).
