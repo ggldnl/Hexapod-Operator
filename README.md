@@ -7,7 +7,7 @@ For a complete overview of the project refer to the [main Hexapod repository](ht
 
 Below, you will find instructions on how to build and deploy the code and info on how the communication protocol I designed works.
 
-# Build and deployment
+## 🛠️ Build and deployment
 
 Before you start, take a look at this [template](https://github.com/pimoroni/pico-boilerplate?tab=readme-ov-file#before-you-start). This served as starting point to develop the firmware.
 
@@ -22,7 +22,7 @@ pico
 
 Feel free to use another name for the `pico` directory. I will use this out of simplicity. 
 
-## Prepare the build environment
+### Prepare the build environment
 
 Install build requirements:
 
@@ -31,7 +31,7 @@ sudo apt update
 sudo apt install cmake gcc-arm-none-eabi build-essential
 ```
 
-## Download the pico SDK
+### Download the pico SDK
 
 Download the pico SDK in the `pico` directory:
 
@@ -50,7 +50,7 @@ The `PICO_SDK_PATH` set above will only last the duration of your session. To ma
 echo 'export PICO_SDK_PATH="/path/to/pico-sdk"' >> ~/.bashrc
 ```
 
-## Download the Pimoroni libraries
+### Download the Pimoroni libraries
 
 Download the Pimoroni libraries in the `pico` directory:
 
@@ -58,7 +58,7 @@ Download the Pimoroni libraries in the `pico` directory:
 git clone https://github.com/pimoroni/pimoroni-pico
 ```
 
-## Clone the project
+### Clone the project
 
 ```bash
 git clone https://github.com/ggldnl/Hexapod-Operator
@@ -66,7 +66,7 @@ git clone https://github.com/ggldnl/Hexapod-Operator
 
 If you have not or don't want to set `PICO_SDK_PATH` you can edit `.vscode/settings.json` to pass the path directly to CMake.
 
-## Build
+### Build
 
 Create a build directory in the root folder of the project and compile.
 
@@ -79,17 +79,17 @@ make
 
 Once you compile the project you will end up with a `Hexapod.uf2` file inside the `build` directory.
 
-## Delpoy
+### 🚀 Delpoy
 
 - Connect the servo2040 board to the computer;
 - Hold down the `boot/user` button, press the `reset` button at the same time, and let go of both buttons. The Servo2040 should now appear as drive to the computer;
 - Drag and drop the `Hexapod.uf2` image file to the Servo2040 drive, the device will automatically reboot and start the loaded program.
 
-# Communication protocol
+## 📡 Communication protocol
 
 This document outlines the specifications for the communication protocol. Commands are sent from the controlling machine (Raspberry Pi) to the Servo2040 board over a serial connection. The two must agreen on the instruction table and on pin configuration (input/output) beforehand. 
 
-## Instruction list
+### 📋 Instruction set
 
 The following table describes the supported operations, their corresponding opcodes, the expected arguments, and the response format:
 
@@ -126,7 +126,7 @@ Description table:
 
 The protocol is designed using the Command Design Pattern, which simplifies the addition of new commands. 
 
-## Implementation details
+### Implementation details
 
 We start defining a shared object pool. 
 
@@ -152,11 +152,9 @@ dispatcher.registerCommand(0x01, std::make_unique<GetVoltageCommand>(reader));
 
 Upon receipt of a message, the `dispatcher` handles it. The first byte, the opcode, is used to lookup and dispatch the corresponding command. If the opcode matches a registered command, the `dispatcher` executes the command with the remainig bytes in the message as arguments. The response from the command is then sent back to the controlling machine over the serial connection.
 
-## Adding a new command
+### 🧩 Adding a new command
 
 As an example we can add a command that toggles the status of a variable. It will need no arguments and return a single byte each time, `0x00`. 
-
-### Define the command class
 
 Create a new header file named `toggle_status_command.hpp` in the commands directory. Implement the class as follows:
 
@@ -190,8 +188,6 @@ public:
 
 To be a valid command, the new class must extend the `Command` base class and implement the `execute()` and `getResponse()` methods. The `execute()` method contains the logic for toggling the status variable, and the `getResponse()` method returns a success response.
 
-### Register the command with the dispatcher
-
 Next, include the new command in your main program and register it with the dispatcher using an available opcode. Here’s how to do it:
 
 ```cpp
@@ -220,3 +216,11 @@ int main() {
 ```
 
 I used opcode `0x08` as it's the first available. Once registered, the dispatcher will automatically invoke the new `ToggleStatusCommand` when the opcode `0x08` is received as first byte over the serial connection. The following bytes are treated as arguments and interpreted.
+
+## 📝 Notes
+
+When the servos are attached they are automatically set to 0.
+
+## 🤝 Contribution
+
+Feel free to contribute by opening issues or submitting pull requests. For further information, check out the [main Hexapod repository](https://github.com/ggldnl/Hexapod).
