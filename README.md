@@ -87,7 +87,7 @@ Once you compile the project you will end up with a `Hexapod.uf2` file inside th
 
 ## 📡 Communication protocol
 
-This document outlines the specifications for the communication protocol. Commands are sent from the controlling machine (Raspberry Pi) to the Servo2040 board over a serial connection. The two must agreen on the instruction table and on pin configuration (input/output) beforehand. 
+This paragraph outlines the specifications for the communication protocol. Commands are sent from the controlling machine (Raspberry Pi) to the operator (Servo2040) over a serial connection. The two must agreen on the instruction table beforehand. 
 
 ### 📋 Instruction set
 
