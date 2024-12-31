@@ -64,7 +64,7 @@ git clone https://github.com/pimoroni/pimoroni-pico
 git clone https://github.com/ggldnl/Hexapod-Operator
 ```
 
-If you have not or don't want to set `PICO_SDK_PATH` you can edit `.vscode/settings.json` to pass the path directly to CMake.
+If you have not or don't want to set `PICO_SDK_PATH` and you are using vscode, you can edit `.vscode/settings.json` to pass the path directly to CMake.
 
 ### Build
 
@@ -87,7 +87,7 @@ Once you compile the project you will end up with a `Hexapod.uf2` file inside th
 
 ## 📡 Communication protocol
 
-This document outlines the specifications for the communication protocol. Commands are sent from the controlling machine (Raspberry Pi) to the Servo2040 board over a serial connection. The two must agreen on the instruction table and on pin configuration (input/output) beforehand. 
+This paragraph outlines the specifications for the communication protocol. Commands are sent from the controlling machine (Raspberry Pi) to the operator (Servo2040) over a serial connection. The two must agreen on the instruction table beforehand. 
 
 ### 📋 Instruction set
 
@@ -216,10 +216,6 @@ int main() {
 ```
 
 I used opcode `0x08` as it's the first available. Once registered, the dispatcher will automatically invoke the new `ToggleStatusCommand` when the opcode `0x08` is received as first byte over the serial connection. The following bytes are treated as arguments and interpreted.
-
-## 📝 Notes
-
-When the servos are attached they are automatically set to 0.
 
 ## 🤝 Contribution
 
