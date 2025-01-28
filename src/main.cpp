@@ -51,7 +51,7 @@ int main() {
     dispatcher.registerCommand(0x0B, std::make_unique<SetServoAnglesCommand>(servos));
 
     // Display an animation with the LEDs to signal that the robot is ready
-    for (uint8_t i = 0; i < 6; ++i) {
+    for (uint8_t i = 0; i < servo2040::NUM_LEDS; ++i) {
         dispatcher.dispatch(0x04, {i, 208, 107, 51});   // This is a cool shade of orange
         sleep_ms(50);                                  // wait for 0.5 seconds
         dispatcher.dispatch(0x04, {i, 0, 0, 0});
@@ -79,6 +79,15 @@ int main() {
                 // Take the first byte (opcode) and process the rest as arguments for the respective operation
                 uint8_t opCode = buffer[0];
                 std::vector<uint8_t> args(buffer.begin() + 1, buffer.end());
+
+                // Display the opcode on the LEDs
+                for (uint8_t i = 0; i < 6; ++i) {
+                    bool isOn = opCode & (1 << i); // Check if the i-th bit is 1
+                    if (isOn)
+                        dispatcher.dispatch(0x04, {i, 208, 107, 51});   // Same cool shade of orange
+                    else
+                        dispatcher.dispatch(0x04, {i, 0, 0, 0});
+                }
 
                 // Dispatch the command and get the response
                 response = dispatcher.dispatch(opCode, args);
