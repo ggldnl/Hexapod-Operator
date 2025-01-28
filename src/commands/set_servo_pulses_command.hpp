@@ -26,7 +26,7 @@ public:
         // The first argument specifies the number of 4-byte groups
         uint8_t group_count = args[0];
 
-        // Each group is 4 bytes, so we expect (1 + 5 * group_count) total bytes
+        // Each group is 5 bytes, so we expect (1 + 5 * group_count) total bytes
         if (args.size() != (1 + 5 * group_count)) {
             return;
         }
