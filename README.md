@@ -79,17 +79,24 @@ make
 
 Once you compile the project you will end up with a `Hexapod.uf2` file inside the `build` directory.
 
-### 🚀 Delpoy
+### Delpoy
 
 - Connect the servo2040 board to the computer;
 - Hold down the `boot/user` button, press the `reset` button at the same time, and let go of both buttons. The Servo2040 should now appear as drive to the computer;
 - Drag and drop the `Hexapod.uf2` image file to the Servo2040 drive, the device will automatically reboot and start the loaded program.
 
+If you built the firmware on the raspberry pi that you will use for the Hexapod and you happen to be connected to it with ssh, you can:
+
+- Connect the servo2040 board to the raspberry through usb;
+- Hold down the `boot/user` button, press the `reset` button at the same time, and let go of both buttons. The Servo2040 should now appear as a block device when issuing `lsblk`;
+- Look for the new drive (e.g. `/dev/sda1` mounted at `/media/<username>/RPI-RP2`);
+- From the `build` directory, `mv Hexapod.uf2 /media/<username>/RPI-RP2`, the device will automatically reboot and start the loaded program.
+
 ## 📡 Communication protocol
 
 This paragraph outlines the specifications for the communication protocol. Commands are sent from the controlling machine (Raspberry Pi) to the operator (Servo2040) over a serial connection. The two must agreen on the instruction table beforehand. 
 
-### 📋 Instruction set
+### Instruction set
 
 The following table describes the supported operations, their corresponding opcodes, the expected arguments, and the response format:
 
@@ -152,7 +159,7 @@ dispatcher.registerCommand(0x01, std::make_unique<GetVoltageCommand>(reader));
 
 Upon receipt of a message, the `dispatcher` handles it. The first byte, the opcode, is used to lookup and dispatch the corresponding command. If the opcode matches a registered command, the `dispatcher` executes the command with the remainig bytes in the message as arguments. The response from the command is then sent back to the controlling machine over the serial connection.
 
-### 🧩 Adding a new command
+### Adding a new command
 
 As an example we can add a command that toggles the status of a variable. It will need no arguments and return a single byte each time, `0x00`. 
 
