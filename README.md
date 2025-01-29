@@ -7,6 +7,10 @@ For a complete overview of the project refer to the [main Hexapod repository](ht
 
 Below, you will find instructions on how to build and deploy the code and info on how the communication protocol I designed works.
 
+## ⚠️ Warn
+
+Use this branch if for whatever reason you prefer to use USB over UART.
+
 ## 🛠️ Build and deployment
 
 Before you start, take a look at this [template](https://github.com/pimoroni/pico-boilerplate?tab=readme-ov-file#before-you-start). This served as starting point to develop the firmware.
@@ -79,17 +83,24 @@ make
 
 Once you compile the project you will end up with a `Hexapod.uf2` file inside the `build` directory.
 
-### 🚀 Delpoy
+### Delpoy
 
 - Connect the servo2040 board to the computer;
 - Hold down the `boot/user` button, press the `reset` button at the same time, and let go of both buttons. The Servo2040 should now appear as drive to the computer;
 - Drag and drop the `Hexapod.uf2` image file to the Servo2040 drive, the device will automatically reboot and start the loaded program.
 
+If you built the firmware on the raspberry pi that you will use for the Hexapod and you happen to be connected to it with ssh, you can:
+
+- Connect the servo2040 board to the raspberry through usb;
+- Hold down the `boot/user` button, press the `reset` button at the same time, and let go of both buttons. The Servo2040 should now appear as a block device when issuing `lsblk`;
+- Look for the new drive (e.g. `/dev/sda1` mounted at `/media/<username>/RPI-RP2`);
+- From the `build` directory, `mv Hexapod.uf2 /media/<username>/RPI-RP2`, the device will automatically reboot and start the loaded program.
+
 ## 📡 Communication protocol
 
 This paragraph outlines the specifications for the communication protocol. Commands are sent from the controlling machine (Raspberry Pi) to the operator (Servo2040) over a serial connection. The two must agreen on the instruction table beforehand. 
 
-### 📋 Instruction set
+### Instruction set
 
 The following table describes the supported operations, their corresponding opcodes, the expected arguments, and the response format:
 
@@ -106,6 +117,8 @@ The following table describes the supported operations, their corresponding opco
 | Set Servos Pulse Width    | `0x09`       | `<num>` (1 byte) `<pin>` `<pulse_width>` (5 bytes) x num       | `0x00`  (1 byte)  |
 | Set Servo Angle           | `0x0A`       | `<pin>` (1 byte) `<angle>` (4 bytes)                           | `0x00`  (1 byte)  |
 | Set Servo Angles          | `0x0B`       | `<num>` (1 byte) `<pin>` `<angle>` (5 bytes) x num             | `0x00`  (1 byte)  |
+| Connect Relay          | `0x0C`       | None                                                          | `0x00`  (1 byte)  |
+| Disconnect Relay       | `0x0D`       | None                                                          | `0x00`  (1 byte)  |
 
 Description table:
 
@@ -122,7 +135,10 @@ Description table:
 | Set Servos Pulse Width    | For each Servo pin, sets the respective pulse width                                               |
 | Set Servo Angle           | Set the angle for the specified servo                                                             |
 | Set Servo Angles          | For each Servo pin, sets the respective angle                                                     |
+| Connect Relay          | Turns the relay on, giving power to the servos      |
+| Disconnect Relay       | Torns the relay off, disconnecting the servos       |
 
+Leading `0xAA` and trailing `0xFF` bytes are added and serve as packet delimiters. 
 
 The protocol is designed using the Command Design Pattern, which simplifies the addition of new commands. 
 
@@ -152,7 +168,7 @@ dispatcher.registerCommand(0x01, std::make_unique<GetVoltageCommand>(reader));
 
 Upon receipt of a message, the `dispatcher` handles it. The first byte, the opcode, is used to lookup and dispatch the corresponding command. If the opcode matches a registered command, the `dispatcher` executes the command with the remainig bytes in the message as arguments. The response from the command is then sent back to the controlling machine over the serial connection.
 
-### 🧩 Adding a new command
+### Adding a new command
 
 As an example we can add a command that toggles the status of a variable. It will need no arguments and return a single byte each time, `0x00`. 
 
@@ -215,7 +231,7 @@ int main() {
 }
 ```
 
-I used opcode `0x08` as it's the first available. Once registered, the dispatcher will automatically invoke the new `ToggleStatusCommand` when the opcode `0x08` is received as first byte over the serial connection. The following bytes are treated as arguments and interpreted.
+I used opcode `0x0E` as it's the first available. Once registered, the dispatcher will automatically invoke the new `ToggleStatusCommand` when the opcode `0x0E` is received as first byte over the serial connection. The following bytes are treated as arguments and interpreted.
 
 ## 🤝 Contribution
 
