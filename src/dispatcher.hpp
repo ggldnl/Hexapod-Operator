@@ -13,7 +13,7 @@ public:
         commandMap[opCode] = std::move(command);
     }
 
-    std::vector<uint8_t> dispatch(uint8_t opCode, const std::vector<uint8_t>& args) {
+    std::vector<uint8_t> dispatch(uint8_t opCode, const std::vector<uint8_t>& args = {}) {
         if (commandMap.find(opCode) != commandMap.end()) {
             commandMap[opCode]->execute(args);
             return commandMap[opCode]->getResponse();

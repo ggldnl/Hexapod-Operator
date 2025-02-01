@@ -33,9 +33,9 @@ int main() {
     stdio_init_all();
 
     // Initialize the UART
-    uart_init(UART_ID, BAUD_RATE)
-    gpio_set_function(UART_TX, UART_FUNCSEL_NUM(UART_ID, UART_TX))
-    gpio_set_function(UART_RX, UART_FUNCSEL_NUM(UART_ID, UART_RX))
+    uart_init(UART_ID, BAUD_RATE);
+    gpio_set_function(UART_TX, UART_FUNCSEL_NUM(UART_ID, UART_TX));
+    gpio_set_function(UART_RX, UART_FUNCSEL_NUM(UART_ID, UART_RX));
 
     // Initialize the relay pins
     gpio_init(RELAY_PIN);
@@ -65,8 +65,8 @@ int main() {
     dispatcher.registerCommand(SET_SERVO_PULSES_COMMAND, std::make_unique<SetServoPulsesCommand>(servos));
     dispatcher.registerCommand(SET_SERVO_ANGLE_COMMAND, std::make_unique<SetServoAngleCommand>(servos));
     dispatcher.registerCommand(SET_SERVO_ANGLES_COMMAND, std::make_unique<SetServoAnglesCommand>(servos));
-    dispatcher.registerCommand(CONNECT_RELAY_COMMAND, std::make_unique<ConnectRelayCommand>(relay))
-    dispatcher.registerCommand(DISCONNECT_RELAY_COMMAND, std::make_unique<DisconnectRelayCommand>(relay))
+    dispatcher.registerCommand(CONNECT_RELAY_COMMAND, std::make_unique<ConnectRelayCommand>(relay));
+    dispatcher.registerCommand(DISCONNECT_RELAY_COMMAND, std::make_unique<DisconnectRelayCommand>(relay));
 
     // Display an animation with the LEDs to signal that the robot is ready
     for (uint8_t i = 0; i < servo2040::NUM_LEDS; ++i) {
@@ -80,6 +80,8 @@ int main() {
 
     while (true) {  // Infinite loop to continuously read incoming bytes
 
+        std::vector<uint8_t> buffer;
+
         // Read incoming bytes from UART
         while (uart_is_readable(UART_ID)) {
             uint8_t byte = uart_getc(UART_ID);
@@ -91,6 +93,7 @@ int main() {
             uint8_t opCode = buffer[0];
             std::vector<uint8_t> args(buffer.begin() + 1, buffer.end());
 
+            /*
             // Display the opcode on the LEDs
             for (uint8_t i = 0; i < 6; ++i) {
                 bool isOn = opCode & (1 << i); // Check if the i-th bit is 1
@@ -99,6 +102,7 @@ int main() {
                 else
                     dispatcher.dispatch(SET_LED_COMMAND, {i, 0, 0, 0});
             }
+            */
 
             // Dispatch the command and get the response
             response = dispatcher.dispatch(opCode, args);
@@ -109,14 +113,17 @@ int main() {
             }
         }
 
+        /*
         #ifdef AUTO_DISCONNECT_UPON_CURRENT_LIMIT
 
-        float current = dispatcher.dispatch(GET_CURRENT_COMMAND)
+        std::vector<uint8_t> current_bytes = dispatcher.dispatch(GET_CURRENT_COMMAND);
+        float current = vec2float(current_bytes);
         if (current > CURRENT_THRESHOLD) {
             dispatcher.dispatch(DISCONNECT_RELAY_COMMAND);
         }
 
         #endif
+        */
 
     }
 
