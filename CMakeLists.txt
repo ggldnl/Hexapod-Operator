@@ -16,7 +16,6 @@ pico_sdk_init()
 # Define the source files
 set(SOURCES
     src/main.cpp
-    # src/dispatcher.hpp
 )
 
 # Define the include directories
@@ -34,6 +33,7 @@ include(drivers/analog/analog)
 
 # Don't forget to link the libraries you need!
 target_link_libraries(${NAME}
+    hardware_uart
     pico_stdlib
     servo2040
     analogmux
@@ -42,8 +42,8 @@ target_link_libraries(${NAME}
 )
 
 # Enable usb output, disable uart output
-pico_enable_stdio_usb(${NAME} 1)
-pico_enable_stdio_uart(${NAME} 0)
+pico_enable_stdio_usb(${NAME} 0)
+pico_enable_stdio_uart(${NAME} 1)
 
 # Create map/bin/hex file etc.
 pico_add_extra_outputs(${NAME})

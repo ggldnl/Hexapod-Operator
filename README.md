@@ -92,6 +92,23 @@ If you built the firmware on the raspberry pi that you will use for the Hexapod 
 - Look for the new drive (e.g. `/dev/sda1` mounted at `/media/<username>/RPI-RP2`);
 - From the `build` directory, `mv Hexapod.uf2 /media/<username>/RPI-RP2`, the device will automatically reboot and start the loaded program.
 
+## 🔌 Connection
+
+Connect the Servo2040 board to the raspberry pi as follows:
+
+| Raspberry    | Servo2040 |
+|--------------|-----------|
+| 5V           | 5V        |
+| GND          | GND       |
+| GPIO14 (TXD) | SDA (RX)  |
+| GPIO15 (RXD) | SCL (TX)  |
+
+Remember to enable hardware uart: 
+- `sudo raspi-config` > `Interface Options` > `Serial Port`
+- Would you like a login shell to be accessible over serial? > `No`
+- Would you like the serial port hardware to be enabled? > `Yes`
+- Save and reboot.
+
 ## 📡 Communication protocol
 
 This paragraph outlines the specifications for the communication protocol. Commands are sent from the controlling machine (Raspberry Pi) to the operator (Servo2040) over a serial connection. The two must agreen on the instruction table beforehand. 
@@ -100,36 +117,39 @@ This paragraph outlines the specifications for the communication protocol. Comma
 
 The following table describes the supported operations, their corresponding opcodes, the expected arguments, and the response format:
 
-| Operation                 | OpCode (Hex) | Arguments                                                      | Response          |
-|---------------------------|--------------|----------------------------------------------------------------|-------------------|
-| Get Voltage               | `0x01`       | None                                                           | `<val>` (4 bytes) |
-| Get Current               | `0x02`       | None                                                           | `<val>` (4 bytes) |
-| Read Sensor               | `0x03`       | `<pin>` (1 byte)                                               | `<val>` (4 bytes) |
-| Set LED                   | `0x04`       | `<pin>` (1 byte) `<r>` (1 byte) `<g>` (1 byte) `<b>` (1 byte)  | `0x00`  (1 byte)  |
-| Set LEDs                  | `0x05`       | `<num>` (1 byte) `<pin>` `<r>` `<g>` `<b>` (4 bytes) x num     | `0x00`  (1 byte)  |
-| Attach Servos             | `0x06`       | None                                                           | `0x00`  (1 byte)  |
-| Detach Servos             | `0x07`       | None                                                           | `0x00`  (1 byte)  |
-| Set Servo Pulse Width     | `0x08`       | `<pin>` (1 byte) `<pulse_width>` (4 bytes)                     | `0x00`  (1 byte)  |
-| Set Servos Pulse Width    | `0x09`       | `<num>` (1 byte) `<pin>` `<pulse_width>` (5 bytes) x num       | `0x00`  (1 byte)  |
-| Set Servo Angle           | `0x0A`       | `<pin>` (1 byte) `<angle>` (4 bytes)                           | `0x00`  (1 byte)  |
-| Set Servo Angles          | `0x0B`       | `<num>` (1 byte) `<pin>` `<angle>` (5 bytes) x num             | `0x00`  (1 byte)  |
+| Operation              | OpCode (Hex) | Arguments                                                     | Response          |
+|------------------------|--------------|---------------------------------------------------------------|-------------------|
+| Get Voltage            | `0x01`       | None                                                          | `<val>` (4 bytes) |
+| Get Current            | `0x02`       | None                                                          | `<val>` (4 bytes) |
+| Read Sensor            | `0x03`       | `<pin>` (1 byte)                                              | `<val>` (4 bytes) |
+| Set LED                | `0x04`       | `<pin>` (1 byte) `<r>` (1 byte) `<g>` (1 byte) `<b>` (1 byte) | `0x00`  (1 byte)  |
+| Set LEDs               | `0x05`       | `<num>` (1 byte) `<pin>` `<r>` `<g>` `<b>` (4 bytes) x num    | `0x00`  (1 byte)  |
+| Attach Servos          | `0x06`       | None                                                          | `0x00`  (1 byte)  |
+| Detach Servos          | `0x07`       | None                                                          | `0x00`  (1 byte)  |
+| Set Servo Pulse Width  | `0x08`       | `<pin>` (1 byte) `<pulse_width>` (4 bytes)                    | `0x00`  (1 byte)  |
+| Set Servos Pulse Width | `0x09`       | `<num>` (1 byte) `<pin>` `<pulse_width>` (5 bytes) x num      | `0x00`  (1 byte)  |
+| Set Servo Angle        | `0x0A`       | `<pin>` (1 byte) `<angle>` (4 bytes)                          | `0x00`  (1 byte)  |
+| Set Servo Angles       | `0x0B`       | `<num>` (1 byte) `<pin>` `<angle>` (5 bytes) x num            | `0x00`  (1 byte)  |
+| Connect Relay          | `0x0C`       | None                                                          | `0x00`  (1 byte)  |
+| Disconnect Relay       | `0x0D`       | None                                                          | `0x00`  (1 byte)  |
 
 Description table:
 
-| Operation                 | Description                                                                                       |
-|---------------------------|---------------------------------------------------------------------------------------------------|
-| Get Voltage               | Reads the voltage on the external trace                                                           |
-| Get Current               | Reads the current on the external trace                                                           |
-| Read Sensor               | Reads the voltage value of an analog pin                                                          |
-| Set LED                   | Sets the rgb value for the given LED                                                              |
-| Set LEDs                  | For each LED pin, sets the respective rgb value                                                   |
-| Attach Servos             | Attaches all the servos                                                                           |
-| Detach Servos             | Detaches all the servos                                                                           |
-| Set Servo Pulse Width     | Set the pulse width for the specified servo                                                       |
-| Set Servos Pulse Width    | For each Servo pin, sets the respective pulse width                                               |
-| Set Servo Angle           | Set the angle for the specified servo                                                             |
-| Set Servo Angles          | For each Servo pin, sets the respective angle                                                     |
-
+| Operation              | Description                                         |
+|------------------------|-----------------------------------------------------|
+| Get Voltage            | Reads the voltage on the external trace             |
+| Get Current            | Reads the current on the external trace             |
+| Read Sensor            | Reads the voltage value of an analog pin            |
+| Set LED                | Sets the rgb value for the given LED                |
+| Set LEDs               | For each LED pin, sets the respective rgb value     |
+| Attach Servos          | Attaches all the servos                             |
+| Detach Servos          | Detaches all the servos                             |
+| Set Servo Pulse Width  | Set the pulse width for the specified servo         |
+| Set Servos Pulse Width | For each Servo pin, sets the respective pulse width |
+| Set Servo Angle        | Set the angle for the specified servo               |
+| Set Servo Angles       | For each Servo pin, sets the respective angle       |
+| Connect Relay          | Turns the relay on, giving power to the servos      |
+| Disconnect Relay       | Torns the relay off, disconnecting the servos       |
 
 The protocol is designed using the Command Design Pattern, which simplifies the addition of new commands. 
 
@@ -141,6 +161,7 @@ We start defining a shared object pool.
 // Shared object pool
 ServoCluster servos = ServoCluster(pio0, 0, servo2040::SERVO_1, servo2040::NUM_SERVOS);
 WS2812 leds(servo2040::NUM_LEDS, pio1, 0, servo2040::LED_DATA);
+Relay relay(RELAY_PIN);
 AnalogReader reader;
 
 servos.init();
