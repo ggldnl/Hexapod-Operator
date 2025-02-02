@@ -151,6 +151,8 @@ Description table:
 | Connect Relay          | Turns the relay on, giving power to the servos      |
 | Disconnect Relay       | Torns the relay off, disconnecting the servos       |
 
+Leading `0xAA` and trailing `0xFF` bytes are added and serve as packet delimiters. 
+
 The protocol is designed using the Command Design Pattern, which simplifies the addition of new commands. 
 
 ### Implementation details
@@ -243,7 +245,7 @@ int main() {
 }
 ```
 
-I used opcode `0x08` as it's the first available. Once registered, the dispatcher will automatically invoke the new `ToggleStatusCommand` when the opcode `0x08` is received as first byte over the serial connection. The following bytes are treated as arguments and interpreted.
+I used opcode `0x0E` as it's the first available. Once registered, the dispatcher will automatically invoke the new `ToggleStatusCommand` when the opcode `0x0E` is received as first byte over the serial connection. The following bytes are treated as arguments and interpreted.
 
 ## 🤝 Contribution
 
