@@ -39,7 +39,7 @@ int main() {
 
     // Initialize the relay pins
     gpio_init(RELAY_PIN);
-    gpio_set_dir(RELAY_PIN, GPIO_OUT);  // Set as output
+    gpio_set_dir(RELAY_PIN, GPIO_OUT);
 
     // Shared object pool
     ServoCluster servos = ServoCluster(pio0, 0, servo2040::SERVO_1, servo2040::NUM_SERVOS);
@@ -70,46 +70,61 @@ int main() {
 
     // Display an animation with the LEDs to signal that the robot is ready
     for (uint8_t i = 0; i < servo2040::NUM_LEDS; ++i) {
-        dispatcher.dispatch(SET_LED_COMMAND, {i, 208, 107, 51});   // This is a cool shade of orange
-        sleep_ms(50);                                  // wait for 0.5 seconds
+        dispatcher.dispatch(SET_LED_COMMAND, {i, 208, 107, 51});    // This is a cool shade of orange
+        sleep_ms(50);                                               // wait for 0.5 seconds
         dispatcher.dispatch(SET_LED_COMMAND, {i, 0, 0, 0});
     }
 
-    // Where to store the response
     std::vector<uint8_t> response;
+    std::vector<uint8_t> buffer;
 
-    while (true) {  // Infinite loop to continuously read incoming bytes
+    while (true) {
 
-        std::vector<uint8_t> buffer;
-
-        // Read incoming bytes from UART
         while (uart_is_readable(UART_ID)) {
+
             uint8_t byte = uart_getc(UART_ID);
-            buffer.push_back(byte);
-        }
 
-        // Process the command if data is available
-        if (!buffer.empty()) {
-            uint8_t opCode = buffer[0];
-            std::vector<uint8_t> args(buffer.begin() + 1, buffer.end());
+            switch(byte) {
 
-            /*
-            // Display the opcode on the LEDs
-            for (uint8_t i = 0; i < 6; ++i) {
-                bool isOn = opCode & (1 << i); // Check if the i-th bit is 1
-                if (isOn)
-                    dispatcher.dispatch(SET_LED_COMMAND, {i, 208, 107, 51});   // Same cool shade of orange
-                else
-                    dispatcher.dispatch(SET_LED_COMMAND, {i, 0, 0, 0});
-            }
-            */
+                case COMMAND_START:
 
-            // Dispatch the command and get the response
-            response = dispatcher.dispatch(opCode, args);
+                    buffer.clear();
+                    response.clear();
+                    break;
 
-            // Send the response back over UART
-            for (uint8_t byte : response) {
-                uart_putc(UART_ID, byte);
+                case COMMAND_END:
+
+                    // Process the command if data is available
+                    if (!buffer.empty()) {
+                        uint8_t opCode = buffer[0];
+                        std::vector<uint8_t> args(buffer.begin() + 1, buffer.end());
+
+			/*
+                        // Display the opcode on the LEDs
+                        for (uint8_t i = 0; i < servo2040::NUM_LEDS; ++i) {
+                            bool isOn = opCode & (1 << i); // Check if the i-th bit is 1
+                            if (isOn)
+                                dispatcher.dispatch(SET_LED_COMMAND, {i, 208, 107, 51});   // Same cool shade of orange
+                            else
+                                dispatcher.dispatch(SET_LED_COMMAND, {i, 0, 0, 0});
+                        }
+			*/
+
+                        // Dispatch the command and get the response
+                        response = dispatcher.dispatch(opCode, args);
+
+                        // Send the response back over UART
+                        uart_putc(UART_ID, COMMAND_START);
+                        for (uint8_t byte : response) {
+                            uart_putc(UART_ID, byte);
+                        }
+                        uart_putc(UART_ID, COMMAND_END);
+                    }
+
+                default:
+
+                    buffer.push_back(byte);
+                    break;
             }
         }
 

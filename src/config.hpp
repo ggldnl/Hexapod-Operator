@@ -12,7 +12,7 @@
 #define CURRENT_THRESHOLD 6.0
 
 // Relay config
-#define RELAY_PIN 26  // A0 -> GPIO26
+#define RELAY_PIN 19
 
 // Commands
 #define GET_VOLTAGE_COMMAND 0x01
@@ -28,5 +28,9 @@
 #define SET_SERVO_ANGLES_COMMAND 0x0B
 #define CONNECT_RELAY_COMMAND 0x0C
 #define DISCONNECT_RELAY_COMMAND 0x0D
+
+// Control bits
+#define COMMAND_START 0xAA
+#define COMMAND_END 0xFF
 
 #endif  // CONFIG_HPP
