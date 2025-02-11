@@ -149,7 +149,7 @@ Description table:
 | Set Servo Angle        | Set the angle for the specified servo               |
 | Set Servo Angles       | For each Servo pin, sets the respective angle       |
 | Connect Relay          | Turns the relay on, giving power to the servos      |
-| Disconnect Relay       | Torns the relay off, disconnecting the servos       |
+| Disconnect Relay       | Turns the relay off, disconnecting the servos       |
 
 Leading `0xAA` and trailing `0xFF` bytes are added and serve as packet delimiters. 
 
@@ -249,4 +249,4 @@ I used opcode `0x0E` as it's the first available. Once registered, the dispatche
 
 ## 🤝 Contribution
 
-Feel free to contribute by opening issues or submitting pull requests. For further information, check out the [main Hexapod repository](https://github.com/ggldnl/Hexapod).
+Feel free to contribute by opening issues or submitting pull requests. For further information, check out the [main Hexapod repository](https://github.com/ggldnl/Hexapod). Give a ⭐️ to this project if you liked the content.
