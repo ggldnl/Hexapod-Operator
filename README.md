@@ -149,7 +149,7 @@ Description table:
 | Set Servo Angle        | Set the angle for the specified servo               |
 | Set Servo Angles       | For each Servo pin, sets the respective angle       |
 | Connect Relay          | Turns the relay on, giving power to the servos      |
-| Disconnect Relay       | Torns the relay off, disconnecting the servos       |
+| Disconnect Relay       | Turns the relay off, disconnecting the servos       |
 
 Leading `0xAA` and trailing `0xFF` bytes are added and serve as packet delimiters. 
 
